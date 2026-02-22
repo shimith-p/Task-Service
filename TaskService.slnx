@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TaskService.Api/TaskService.Api.csproj" Id="67272b79-aa42-4fb4-a5b9-1b0a4bca57a0" />
+    <Project Path="src/TaskService.Application/TaskService.Application.csproj" Id="a473859f-219f-4f10-acf8-2f9128ff6636" />
+    <Project Path="src/TaskService.Domain/TaskService.Domain.csproj" Id="d4b53744-c72a-43d0-afc2-c965e4f90a93" />
+    <Project Path="src/TaskService.Infrastructure/TaskService.Infrastructure.csproj" Id="0aa8759d-aedc-443b-97c8-a71ef5ef7a20" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TaskService.Api.Tests/TaskService.Api.Tests.csproj" Id="0b654fa5-4c12-4ae2-983f-0f46a0e1654b" />
+    <Project Path="tests/TaskService.Application.Tests/TaskService.Application.Tests.csproj" Id="1515ed17-298f-4a4d-a6ab-ec74172342f7" />
+    <Project Path="tests/TaskService.Infrastructure.Tests/TaskService.Infrastructure.Tests.csproj" Id="11086fae-9ea6-429c-8026-bec7f772f64e" />
+  </Folder>
+</Solution>
