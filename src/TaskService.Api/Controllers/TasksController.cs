@@ -5,7 +5,7 @@ using TaskService.Application.Interfaces;
 namespace TaskService.Api.Controllers;
 
 [ApiController]
-[Route("v1/api/[controller]")]
+[Route("v1/api/tasks")]
 [Produces("application/json")]
 public sealed class TasksController : ControllerBase
 {
@@ -32,23 +32,17 @@ public sealed class TasksController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create(
+    public async Task<IActionResult> CreateTaskAsync(
         [FromBody] CreateTaskDto dto,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Creating task. Title={Title}", dto?.Title);
+        _logger.LogInformation("Creating task. Title={Title}", dto?.Title); 
 
-        if (!ModelState.IsValid)
-        {
-            _logger.LogWarning("Invalid model state for create task. ErrorCount={ErrorCount}", ModelState.ErrorCount);
-            return ValidationProblem(ModelState);
-        }
-
-        var created = await _taskServices.CreateAsync(dto, cancellationToken);
+        var created = await _taskServices.CreateTaskAsync(dto, cancellationToken);
 
         _logger.LogInformation("Task created. Id={TaskId}", created.Id);
 
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetTaskByIdAsync), new { id = created.Id }, created);
     }
 
     /// <summary>Gets a single task by its unique identifier.</summary>
@@ -60,7 +54,7 @@ public sealed class TasksController : ControllerBase
     [ProducesResponseType(typeof(TaskResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponsePayloadDto), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(
+    public async Task<IActionResult> GetTaskByIdAsync(
         [FromRoute] int id,
         CancellationToken cancellationToken)
     {
@@ -72,7 +66,7 @@ public sealed class TasksController : ControllerBase
 
         _logger.LogDebug("Getting task by id. Id={TaskId}", id);
 
-        var task = await _taskServices.GetByIdAsync(id, cancellationToken);
+        var task = await _taskServices.GetTaskByIdAsync(id, cancellationToken);
 
         return Ok(task);
     }
@@ -81,15 +75,15 @@ public sealed class TasksController : ControllerBase
     /// <response code="200">Array of tasks. Returns an empty array when none exist.</response>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TaskResponseDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTasksAsync(CancellationToken cancellationToken)
     {
         _logger.LogDebug("Getting all tasks");
 
-        var tasks = await _taskServices.GetAllAsync(cancellationToken);
+        var tasks = await _taskServices.GetTasksAsync(cancellationToken);
         return Ok(tasks);
     }
 
-    /// <summary>Fully replaces an existing task (all fields required).</summary>
+    /// <summary>UpdateTaskAsync exist task.</summary>
     /// <param name="id">The task's id.</param> 
     /// <response code="200">Task updated successfully. Returns the updated task.</response>
     /// <response code="404">No task with the given id exists.</response>
@@ -98,20 +92,14 @@ public sealed class TasksController : ControllerBase
     [ProducesResponseType(typeof(TaskResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> Update(
+    public async Task<IActionResult> UpdateTaskAsync(
         [FromRoute] int id,
         [FromBody] UpdateTaskDto dto,
         CancellationToken cancellationToken)
-    {
-        if (!ModelState.IsValid)
-        {
-            _logger.LogWarning("Invalid model state for update task. Id={TaskId} ErrorCount={ErrorCount}", id, ModelState.ErrorCount);
-            return ValidationProblem(ModelState);
-        }
-
+    { 
         _logger.LogInformation("Updating task. Id={TaskId}", id);
 
-        var updated = await _taskServices.UpdateAsync(id, dto, cancellationToken);
+        var updated = await _taskServices.UpdateTaskAsync(id, dto, cancellationToken);
         _logger.LogInformation("Task updated. Id={TaskId}", id);
         return Ok(updated);
     }
@@ -123,7 +111,7 @@ public sealed class TasksController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(
+    public async Task<IActionResult> DeleteTaskAsync(
         [FromRoute] int id,
         CancellationToken cancellationToken)
     {
@@ -135,7 +123,7 @@ public sealed class TasksController : ControllerBase
 
         _logger.LogInformation("Deleting task. Id={TaskId}", id);
 
-        await _taskServices.DeleteAsync(id, cancellationToken);
+        await _taskServices.DeleteTaskAsync(id, cancellationToken);
         _logger.LogInformation("Task deleted. Id={TaskId}", id);
         return NoContent();
     }
