@@ -10,20 +10,20 @@ using ValidationException = TaskService.Application.Exceptions.ValidationExcepti
 
 namespace TaskService.Application.Services;
 
-public sealed class TaskServices : ITaskServices
+public sealed class TasksService : ITasksService
 {
     private readonly ITaskRepository _repository;
     private readonly IMapper _mapper;
     private readonly IValidator<CreateTaskDto> _createValidator;
     private readonly IValidator<UpdateTaskDto> _updateValidator;
-    private readonly ILogger<TaskServices> _logger;
+    private readonly ILogger<TasksService> _logger;
 
-    public TaskServices(
+    public TasksService(
         ITaskRepository repository,
         IMapper mapper,
         IValidator<CreateTaskDto> createValidator,
         IValidator<UpdateTaskDto> updateValidator,
-        ILogger<TaskServices> logger)
+        ILogger<TasksService> logger)
     {
         _repository = repository;
         _mapper = mapper;

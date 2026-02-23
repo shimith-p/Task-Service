@@ -9,10 +9,10 @@ namespace TaskService.Api.Controllers;
 [Produces("application/json")]
 public sealed class TasksController : ControllerBase
 {
-    private readonly ITaskServices _taskServices;
+    private readonly ITasksService _taskServices;
     private readonly ILogger<TasksController> _logger;
 
-    public TasksController(ITaskServices taskServices, ILogger<TasksController> logger)
+    public TasksController(ITasksService taskServices, ILogger<TasksController> logger)
     {
         _taskServices = taskServices ?? throw new ArgumentNullException(nameof(taskServices)); ;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

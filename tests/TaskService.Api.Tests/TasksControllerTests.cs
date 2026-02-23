@@ -13,13 +13,13 @@ namespace TaskService.Api.Tests
 {
     public class TasksControllerTests
     {
-        private readonly Mock<ITaskServices> mockTaskServices;
+        private readonly Mock<ITasksService> mockTaskServices;
         private readonly Mock<ILogger<TasksController>> mockLogger;
         private readonly TasksController controller;
 
         public TasksControllerTests()
         {
-            mockTaskServices = new Mock<ITaskServices>();
+            mockTaskServices = new Mock<ITasksService>();
             mockLogger = new Mock<ILogger<TasksController>>();
             controller = new TasksController(mockTaskServices.Object, mockLogger.Object);
         }
