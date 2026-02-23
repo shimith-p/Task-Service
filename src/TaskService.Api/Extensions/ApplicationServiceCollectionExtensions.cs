@@ -14,7 +14,7 @@ namespace TaskService.Api.Extensions
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
         {
             services.AddAutoMapper(cfg => cfg.AddProfile<TaskMappingProfile>());
-            services.AddScoped<ITaskServices, TaskServices>();
+            services.AddScoped<ITasksService, TasksService>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<IValidator<CreateTaskDto>, CreateTaskDtoValidator>();
             services.AddScoped<IValidator<UpdateTaskDto>, UpdateTaskDtoValidator>();

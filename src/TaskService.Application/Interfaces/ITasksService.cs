@@ -6,7 +6,7 @@ namespace TaskService.Application.Interfaces;
 /// Application service contract consumed by the API layer.
 /// Operates exclusively on DTOs — no domain models or EF entities leak into the controller.
 /// </summary>
-public interface ITaskServices
+public interface ITasksService
 {
     /// <summary>
     /// Creates a new task. Returns the created task.
