@@ -33,8 +33,7 @@ public sealed class TaskServices : ITaskServices
     } 
 
     /// <summary>
-    /// Creates a new task using the specified DTO and returns a response containing the details of the
-    /// created task.
+    /// Creates a new task using the specified DTO and returns a response containing the details of the created task.
     /// </summary>
     /// <remarks>The method validates the input data before creating the task. If validation fails, an
     /// exception is thrown. The returned response includes the generated task ID and other relevant details.</remarks>
@@ -42,7 +41,7 @@ public sealed class TaskServices : ITaskServices
     /// <param name="cancellationToken">A token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a TaskResponseDto with the details
     /// of the created task, including its generated identifier.</returns>
-    public async Task<TaskResponseDto> CreateAsync(
+    public async Task<TaskResponseDto> CreateTaskAsync(
         CreateTaskDto? dto,
         CancellationToken cancellationToken = default)
     {
@@ -57,7 +56,7 @@ public sealed class TaskServices : ITaskServices
         var model = _mapper.Map<TasksModel>(dto);
 
         // Save to repository.
-        var createdId = await _repository.AddAsync(model, cancellationToken);
+        var createdId = await _repository.AddTaskAsync(model, cancellationToken);
 
         // Update model with generated ID for logging and response mapping.
         model.Id = createdId;
@@ -73,7 +72,7 @@ public sealed class TaskServices : ITaskServices
     /// <param name="id">The ID of the task to retrieve.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="TaskResponseDto"/> representing the task.</returns>
-    public async Task<TaskResponseDto> GetByIdAsync(
+    public async Task<TaskResponseDto> GetTaskByIdAsync(
     int id,
     CancellationToken cancellationToken = default)
     {
@@ -94,13 +93,13 @@ public sealed class TaskServices : ITaskServices
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an enumerable collection of <see
     /// cref="TaskResponseDto"/> objects representing all tasks.</returns>
-    public async Task<IEnumerable<TaskResponseDto>> GetAllAsync(
+    public async Task<IEnumerable<TaskResponseDto>> GetTasksAsync(
         CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Getting all tasks (application)");
 
         // Get all domain models from repository.
-        var models = await _repository.GetAllAsync(cancellationToken);
+        var models = await _repository.GetTasksAsync(cancellationToken);
 
         if (models is ICollection<TasksModel> c)
         {
@@ -119,7 +118,7 @@ public sealed class TaskServices : ITaskServices
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The updated task as a response DTO.</returns>
     /// <exception cref="NotFoundException">Thrown if a task with the specified ID does not exist.</exception>
-    public async Task<TaskResponseDto> UpdateAsync(
+    public async Task<TaskResponseDto> UpdateTaskAsync(
         int id,
         UpdateTaskDto dto,
         CancellationToken cancellationToken = default)
@@ -139,7 +138,7 @@ public sealed class TaskServices : ITaskServices
         var updated = _mapper.Map(dto, existing);
 
         // Update in repository.
-        await _repository.UpdateAsync(updated, cancellationToken);
+        await _repository.UpdateTaskAsync(updated, cancellationToken);
 
         _logger.LogInformation("Task updated. Id={TaskId}", updated.Id);
 
@@ -154,7 +153,7 @@ public sealed class TaskServices : ITaskServices
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="NotFoundException">Thrown if a task with the specified ID does not exist.</exception>
-    public async Task DeleteAsync(
+    public async Task DeleteTaskAsync(
         int id,
         CancellationToken cancellationToken = default)
     {
@@ -164,7 +163,7 @@ public sealed class TaskServices : ITaskServices
         await GetOrThrowAsync(id, cancellationToken);
 
         // Delete from repository.
-        await _repository.DeleteAsync(id, cancellationToken);
+        await _repository.DeleteTaskAsync(id, cancellationToken);
 
         _logger.LogInformation("Task deleted. Id={TaskId}", id);
     }
@@ -172,7 +171,7 @@ public sealed class TaskServices : ITaskServices
     // ── Helpers ───────────────────────────────────────────────────────────────
     private async Task<TasksModel> GetOrThrowAsync(int id, CancellationToken cancellationToken)
     {
-        var model = await _repository.GetByIdAsync(id, cancellationToken);
+        var model = await _repository.GetTaskByIdAsync(id, cancellationToken);
 
         if (model is null)
         {

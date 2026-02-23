@@ -20,7 +20,7 @@ public sealed class TaskRepository : ITaskRepository
         _logger = logger;
     }
 
-    public async Task<int> AddAsync(
+    public async Task<int> AddTaskAsync(
         TasksModel model,
         CancellationToken cancellationToken = default)
     {
@@ -46,7 +46,7 @@ public sealed class TaskRepository : ITaskRepository
         return entity.Id;
     }
 
-    public async Task<TasksModel?> GetByIdAsync(
+    public async Task<TasksModel?> GetTaskByIdAsync(
         int id,
         CancellationToken cancellationToken = default)
     {
@@ -69,7 +69,7 @@ public sealed class TaskRepository : ITaskRepository
         return model;
     }
 
-    public async Task<IEnumerable<TasksModel>> GetAllAsync(
+    public async Task<IEnumerable<TasksModel>> GetTasksAsync(
         CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Getting all tasks (infrastructure)");
@@ -91,7 +91,7 @@ public sealed class TaskRepository : ITaskRepository
         });
     }
 
-    public async Task UpdateAsync(
+    public async Task UpdateTaskAsync(
         TasksModel model,
         CancellationToken cancellationToken = default)
     {
@@ -121,7 +121,7 @@ public sealed class TaskRepository : ITaskRepository
         _logger.LogInformation("Task updated in store (infrastructure). Id={TaskId}", model.Id);
     }
 
-    public async Task DeleteAsync(
+    public async Task DeleteTaskAsync(
         int id,
         CancellationToken cancellationToken = default)
     {

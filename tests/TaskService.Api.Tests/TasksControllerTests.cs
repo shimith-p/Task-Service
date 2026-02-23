@@ -35,15 +35,15 @@ namespace TaskService.Api.Tests
         public async Task Create_Should_Throw_InvalidInputException_If_DTO_Missing()
         {
             // Arrange 
-            mockTaskServices.Setup(s => s.CreateAsync(null!, It.IsAny<CancellationToken>()))
+            mockTaskServices.Setup(s => s.CreateTaskAsync(null!, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidInputException());
 
             // Act
-            await Assert.ThrowsAsync<InvalidInputException>(() => controller.Create(null!, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidInputException>(() => controller.CreateTaskAsync(null!, CancellationToken.None));
 
             // Assert 
 
-            mockTaskServices.Verify(s => s.CreateAsync(null!, It.IsAny<CancellationToken>()), Times.Once);
+            mockTaskServices.Verify(s => s.CreateTaskAsync(null!, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -60,15 +60,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == invalidTitle), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == invalidTitle), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidInputException());
 
             // Act
-            await Assert.ThrowsAsync<InvalidInputException>(() => controller.Create(dto, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidInputException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == invalidTitle), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == invalidTitle), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -85,15 +85,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Title", "Title is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Title", StringComparison.OrdinalIgnoreCase));
@@ -112,15 +112,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Title", "Title is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Title", StringComparison.OrdinalIgnoreCase));
@@ -139,15 +139,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Title", "Title is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Title", StringComparison.OrdinalIgnoreCase));
@@ -166,15 +166,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Description == dto.Description), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Description == dto.Description), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Description", "Description is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Description == dto.Description), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Description == dto.Description), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Description", StringComparison.OrdinalIgnoreCase));
@@ -193,15 +193,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.OriginalEstimatedWork == dto.OriginalEstimatedWork), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.OriginalEstimatedWork == dto.OriginalEstimatedWork), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("OriginalEstimatedWork", "OriginalEstimatedWork is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.OriginalEstimatedWork == dto.OriginalEstimatedWork), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.OriginalEstimatedWork == dto.OriginalEstimatedWork), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "OriginalEstimatedWork", StringComparison.OrdinalIgnoreCase));
@@ -220,15 +220,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Status", "Status is invalid."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Status", StringComparison.OrdinalIgnoreCase));
@@ -254,13 +254,13 @@ namespace TaskService.Api.Tests
                 Status = dto.Status.ToString()
             };
             mockTaskServices
-                .Setup(s => s.CreateAsync(dto, It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(dto, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(responseDto);
             // Act
-            var result = await controller.Create(dto, CancellationToken.None);
+            var result = await controller.CreateTaskAsync(dto, CancellationToken.None);
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
             var createdResult = Assert.IsType<CreatedAtActionResult>(result);
             Assert.Equal(responseDto.Id, createdResult.RouteValues?["id"]);
@@ -281,15 +281,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidOperationException("Conflict: a task with the same title already exists."));
 
             // Act
-            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.Create(dto, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -306,15 +306,15 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Status", "Status is invalid."));
 
             // Act
-            await Assert.ThrowsAsync<ValidationException>(() => controller.Create(dto, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => controller.CreateTaskAsync(dto, CancellationToken.None));
 
             // Assert
             mockTaskServices.Verify(
-                s => s.CreateAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()),
+                s => s.CreateTaskAsync(It.Is<CreateTaskDto>(d => d.Status == dto.Status), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -335,17 +335,17 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
-            var result = await controller.GetById(id, CancellationToken.None);
+            var result = await controller.GetTaskByIdAsync(id, CancellationToken.None);
 
             // Assert
             var ok = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(StatusCodes.Status200OK, ok.StatusCode);
             Assert.Equal(response, ok.Value);
-            mockTaskServices.Verify(s => s.GetByIdAsync(id, It.IsAny<CancellationToken>()), Times.Once);
+            mockTaskServices.Verify(s => s.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -354,12 +354,12 @@ namespace TaskService.Api.Tests
             // Arrange
             var id = 999;
             mockTaskServices
-                .Setup(s => s.GetByIdAsync(id, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new NotFoundException("Task", id));
 
             // Act / Assert
-            await Assert.ThrowsAsync<NotFoundException>(() => controller.GetById(id, CancellationToken.None));
-            mockTaskServices.Verify(s => s.GetByIdAsync(id, It.IsAny<CancellationToken>()), Times.Once);
+            await Assert.ThrowsAsync<NotFoundException>(() => controller.GetTaskByIdAsync(id, CancellationToken.None));
+            mockTaskServices.Verify(s => s.GetTaskByIdAsync(id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -367,18 +367,18 @@ namespace TaskService.Api.Tests
         {
             // Arrange
             mockTaskServices
-                .Setup(s => s.GetAllAsync(It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetTasksAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync([]);
 
             // Act
-            var result = await controller.GetAll(CancellationToken.None);
+            var result = await controller.GetTasksAsync(CancellationToken.None);
 
             // Assert
             var ok = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(StatusCodes.Status200OK, ok.StatusCode);
             var payload = Assert.IsAssignableFrom<IEnumerable<TaskResponseDto>>(ok.Value);
             Assert.Empty(payload);
-            mockTaskServices.Verify(s => s.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
+            mockTaskServices.Verify(s => s.GetTasksAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -406,18 +406,18 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.UpdateAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.UpdateTaskAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
-            var result = await controller.Update(id, dto, CancellationToken.None);
+            var result = await controller.UpdateTaskAsync(id, dto, CancellationToken.None);
 
             // Assert
             var ok = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(StatusCodes.Status200OK, ok.StatusCode);
             Assert.Equal(response, ok.Value);
             mockTaskServices.Verify(
-                s => s.UpdateAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.UpdateTaskAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -435,16 +435,16 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.UpdateAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
+                .Setup(s => s.UpdateTaskAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(ValidationException.For("Title", "Title is required."));
 
             // Act
-            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.Update(id, dto, CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<ValidationException>(() => controller.UpdateTaskAsync(id, dto, CancellationToken.None));
 
             // Assert
             Assert.Contains(ex.Errors.Keys, k => string.Equals(k, "Title", StringComparison.OrdinalIgnoreCase));
             mockTaskServices.Verify(
-                s => s.UpdateAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
+                s => s.UpdateTaskAsync(id, It.Is<UpdateTaskDto>(d => d.Title == dto.Title), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -462,12 +462,12 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.UpdateAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.UpdateTaskAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new NotFoundException("Task", id));
 
             // Act / Assert
-            await Assert.ThrowsAsync<NotFoundException>(() => controller.Update(id, dto, CancellationToken.None));
-            mockTaskServices.Verify(s => s.UpdateAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()), Times.Once);
+            await Assert.ThrowsAsync<NotFoundException>(() => controller.UpdateTaskAsync(id, dto, CancellationToken.None));
+            mockTaskServices.Verify(s => s.UpdateTaskAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -484,12 +484,12 @@ namespace TaskService.Api.Tests
             };
 
             mockTaskServices
-                .Setup(s => s.UpdateAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.UpdateTaskAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidOperationException("Conflict: a task with the same title already exists."));
 
             // Act / Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.Update(id, dto, CancellationToken.None));
-            mockTaskServices.Verify(s => s.UpdateAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()), Times.Once);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.UpdateTaskAsync(id, dto, CancellationToken.None));
+            mockTaskServices.Verify(s => s.UpdateTaskAsync(id, It.IsAny<UpdateTaskDto>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -498,16 +498,16 @@ namespace TaskService.Api.Tests
             // Arrange
             var id = 1;
             mockTaskServices
-                .Setup(s => s.DeleteAsync(id, It.IsAny<CancellationToken>()))
+                .Setup(s => s.DeleteTaskAsync(id, It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await controller.Delete(id, CancellationToken.None);
+            var result = await controller.DeleteTaskAsync(id, CancellationToken.None);
 
             // Assert
             var noContent = Assert.IsType<NoContentResult>(result);
             Assert.Equal(StatusCodes.Status204NoContent, noContent.StatusCode);
-            mockTaskServices.Verify(s => s.DeleteAsync(id, It.IsAny<CancellationToken>()), Times.Once);
+            mockTaskServices.Verify(s => s.DeleteTaskAsync(id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -516,12 +516,12 @@ namespace TaskService.Api.Tests
             // Arrange
             var id = 999;
             mockTaskServices
-                .Setup(s => s.DeleteAsync(id, It.IsAny<CancellationToken>()))
+                .Setup(s => s.DeleteTaskAsync(id, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new NotFoundException("Task", id));
 
             // Act / Assert
-            await Assert.ThrowsAsync<NotFoundException>(() => controller.Delete(id, CancellationToken.None));
-            mockTaskServices.Verify(s => s.DeleteAsync(id, It.IsAny<CancellationToken>()), Times.Once);
+            await Assert.ThrowsAsync<NotFoundException>(() => controller.DeleteTaskAsync(id, CancellationToken.None));
+            mockTaskServices.Verify(s => s.DeleteTaskAsync(id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
     }
