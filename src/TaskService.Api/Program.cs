@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TaskService.Api.Extensions;
 using TaskService.Api.Middleware;
+using TaskService.Application.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +20,8 @@ builder.Services.Configure<ApiBehaviorOptions>(opts =>
 builder.Services.RegisterApplicationServices();
 
 builder.Services.AddControllers();
- 
-builder.Services.AddAuthentication();
 
-builder.Services.AddAuthorization();
+builder.Services.RegisterJwtAuthExtensions(builder.Configuration);
 
 builder.Services.RegisterDbContextExtensions(builder.Configuration);
 

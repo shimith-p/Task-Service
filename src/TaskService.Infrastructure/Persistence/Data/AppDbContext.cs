@@ -10,6 +10,8 @@ namespace TaskService.Infrastructure.Persistence.Data
 
         public DbSet<TasksEntity> Tasks => Set<TasksEntity>();
         public DbSet<TaskStatusEntity> TaskStatuses => Set<TaskStatusEntity>();
+        public DbSet<UsersEntity> Users => Set<UsersEntity>();
+        public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

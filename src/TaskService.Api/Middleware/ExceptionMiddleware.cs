@@ -57,6 +57,10 @@ public sealed class ExceptionMiddleware
         {
             await HandleExceptionAsync(context, HttpStatusCode.BadRequest, e);
         }
+        catch (UnauthorizedException e)
+        {
+            await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, e);
+        }
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, ex, messageOverride: "An unexpected error occurred.");
