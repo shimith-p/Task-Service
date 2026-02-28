@@ -86,29 +86,40 @@ public sealed class TasksService : ITasksService
     }
 
     /// <summary>
-    /// Asynchronously retrieves all tasks as data transfer objects.
+    /// Asynchronously retrieves tasks as a paged result.
     /// </summary>
-    /// <remarks>This method fetches all task entities from the underlying data store and maps them to
-    /// response DTOs. Use the cancellation token to cancel the operation if needed.</remarks>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an enumerable collection of <see
-    /// cref="TaskResponseDto"/> objects representing all tasks.</returns>
-    public async Task<IEnumerable<TaskResponseDto>> GetTasksAsync(
+    /// <remarks>This method fetches tasks from the underlying data store and applies pagination.
+    /// Use the cancellation token to cancel the operation if needed.</remarks>
+    public async Task<PagedResultDto<TaskResponseDto>> GetTasksAsync(
+        PaginationQueryDto query,
         CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug("Getting all tasks (application)");
+        ArgumentNullException.ThrowIfNull(query);
 
-        // Get all domain models from repository.
-        var models = await _repository.GetTasksAsync(cancellationToken);
+        _logger.LogDebug("Getting tasks (application). PageNumber={PageNumber} PageSize={PageSize}", query.PageNumber, query.PageSize);
 
-        if (models is ICollection<TasksModel> c)
+
+        // Pagination is applied at the application layer.
+        var modelsEnumerable = await _repository.GetTasksAsync(cancellationToken);
+        var models = modelsEnumerable as IList<TasksModel> ?? modelsEnumerable.ToList();
+
+        var totalCount = models.Count;
+        var skip = (query.PageNumber - 1) * query.PageSize;
+
+        var pageModels = skip >= totalCount
+            ? new List<TasksModel>()
+            : models.Skip(skip).Take(query.PageSize).ToList();
+
+        var items = _mapper.Map<List<TaskResponseDto>>(pageModels);
+
+        return new PagedResultDto<TaskResponseDto>
         {
-            _logger.LogDebug("Retrieved tasks (application). Count={Count}", c.Count);
-        }
-
-        // Map domain models to response DTOs and return.
-        return _mapper.Map<IEnumerable<TaskResponseDto>>(models);
-    } 
+            Items = items,
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize,
+            TotalCount = totalCount
+        };
+    }
 
     /// <summary>
     /// Updates the task with the specified ID using the provided data transfer object (DTO).

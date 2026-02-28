@@ -9,12 +9,14 @@ namespace TaskService.Api.Controllers;
 [Produces("application/json")]
 public sealed class TasksController : ControllerBase
 {
+    private const int MaxPageSize = 100;
+
     private readonly ITasksService _taskServices;
     private readonly ILogger<TasksController> _logger;
 
     public TasksController(ITasksService taskServices, ILogger<TasksController> logger)
     {
-        _taskServices = taskServices ?? throw new ArgumentNullException(nameof(taskServices)); ;
+        _taskServices = taskServices ?? throw new ArgumentNullException(nameof(taskServices));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -42,7 +44,7 @@ public sealed class TasksController : ControllerBase
 
         _logger.LogInformation("Task created. Id={TaskId}", created.Id);
 
-        return CreatedAtAction(nameof(GetTaskByIdAsync), new { id = created.Id }, created);
+        return CreatedAtAction("GetTaskById", new { id = created.Id }, created);
     }
 
     /// <summary>Gets a single task by its unique identifier.</summary>
@@ -74,13 +76,22 @@ public sealed class TasksController : ControllerBase
     /// <summary>Lists all tasks ordered by creation date (newest first).</summary>
     /// <response code="200">Array of tasks. Returns an empty array when none exist.</response>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<TaskResponseDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTasksAsync(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(PagedResultDto<TaskResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetTasksAsync(
+        [FromQuery] PaginationQueryDto query,
+        CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Getting all tasks");
+        if (query.PageNumber < 1)
+            return BadRequest("pageNumber must be >= 1.");
 
-        var tasks = await _taskServices.GetTasksAsync(cancellationToken);
-        return Ok(tasks);
+        if (query.PageSize < 1 || query.PageSize > MaxPageSize)
+            return BadRequest($"pageSize must be between 1 and {MaxPageSize}.");
+
+        _logger.LogDebug("Getting tasks. PageNumber={PageNumber} PageSize={PageSize}", query.PageNumber, query.PageSize);
+
+        var result = await _taskServices.GetTasksAsync(query, cancellationToken);
+        return Ok(result);
     }
 
     /// <summary>UpdateTaskAsync exist task.</summary>
