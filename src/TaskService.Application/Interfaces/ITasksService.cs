@@ -21,7 +21,7 @@ public interface ITasksService
     /// <summary>
     /// Returns all tasks ordered by creation date descending.
     /// </summary>
-    Task<IEnumerable<TaskResponseDto>> GetTasksAsync(CancellationToken cancellationToken = default);
+    Task<PagedResultDto<TaskResponseDto>> GetTasksAsync(PaginationQueryDto query, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Update a task. Throws NotFoundException if absent.

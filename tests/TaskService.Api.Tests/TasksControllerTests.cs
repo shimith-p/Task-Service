@@ -367,18 +367,24 @@ namespace TaskService.Api.Tests
         {
             // Arrange
             mockTaskServices
-                .Setup(s => s.GetTasksAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync([]);
+                .Setup(s => s.GetTasksAsync(It.IsAny<PaginationQueryDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new PagedResultDto<TaskResponseDto>
+                {
+                    Items = [],
+                    PageNumber = 1,
+                    PageSize = 20,
+                    TotalCount = 0
+                });
 
             // Act
-            var result = await controller.GetTasksAsync(CancellationToken.None);
+            var result = await controller.GetTasksAsync(new PaginationQueryDto(), CancellationToken.None);
 
             // Assert
             var ok = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(StatusCodes.Status200OK, ok.StatusCode);
-            var payload = Assert.IsAssignableFrom<IEnumerable<TaskResponseDto>>(ok.Value);
-            Assert.Empty(payload);
-            mockTaskServices.Verify(s => s.GetTasksAsync(It.IsAny<CancellationToken>()), Times.Once);
+            var payload = Assert.IsType<PagedResultDto<TaskResponseDto>>(ok.Value);
+            Assert.Empty(payload.Items);
+            mockTaskServices.Verify(s => s.GetTasksAsync(It.IsAny<PaginationQueryDto>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
